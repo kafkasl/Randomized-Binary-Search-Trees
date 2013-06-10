@@ -41,34 +41,36 @@ void deleteRbst(nodo_rbst* x){
 	delete x;
 }
 
-void gt(vector<string>& res, const string& min, bool& error){
+void gt(int & total, const string& min, bool& error){
 	if(raiz != NULL){
+		total = 0;
 		error = false;
-		lesser(res, min, raiz);
+		greater(total, min, raiz);
 	}
 	else error = true;
 }
 
-void lesser(vector<string>& res, const string& min, nodo_rbst* x){
-	if(x->_k > min){
+void lesser(int& res, const string& min, nodo_rbst* x){
+	if(x != NULL and x->_k < min){
 		lesser(res, min, x->_izq);
-		res.push_back(x->_k);
+		++res;
 		lesser(res, min, x->_der);
 	}
 }
 
-void leq(vector<string>& res, const string& max, bool& error){
+void leq(int& res, const string& max, bool& error){
 	if(raiz != NULL){
+		res = 0;
 		error = false;
-		greater(res, max, raiz);
+		lesser(res, max, raiz);
 	}
 	else error = true;
 }
 
-void greater(vector<string>& res, const string& max, nodo_rbst* x){
-	if(x->_k < max){
+void greater(int& res, const string& max, nodo_rbst* x){
+	if(x != NULL and x->_k > max){
 		greater(res, max, x->_der);
-		res.push_back(x->_k);
+		++res;
 		greater(res, max, x->_izq);
 	}
 }
@@ -237,14 +239,36 @@ int main(){
 		else if (op == "nth"){
 			cin >> id_set1 >> i;
 		}
-		else if (op == "leq"){
+		else if (op == "leq"){{
 			cin >> id_set1 >> elem;
+			it = sets.find(id_set1);
+			if(it != sets.end()){
+				sets[id_set1].leq(i, elem, error);
+				if(error == false) cout << i << endl;
+				else cout << "ERROR" << endl;
+			} else cout << "ERROR" << endl;
+		}
 		}
 		else if (op == "gt"){
 			cin >> id_set1 >> elem;
+			it = sets.find(id_set1);
+			if(it != sets.end()){
+				sets[id_set1].gt(i, elem, error);
+				if(error == false) cout << i << endl;
+				else cout << "ERROR" << endl;
+			} else cout << "ERROR" << endl;
 		}
 		else if (op == "between"){
 			cin >> id_set1 >> elem >> elem2;
+			it = sets.find(id_set1);
+			if(it != sets.end()){
+				sets[id_set1].between(res, elem, elem2, error);
+				if (error == false) {
+					cout << "[" << res[0];
+					for(int i = 1; i < res.size(); ++i)cout << "," << res[i];
+					cout << "]" << endl;
+				} else cout << "ERROR" << endl;
+			} else cout << "ERROR" << endl;
 		}
 		else if (op == "min"){
 			cin >> id_set1;
