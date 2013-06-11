@@ -35,6 +35,12 @@ void init(){
 	raiz = NULL;
 }
 
+void card(int& a){
+	if(raiz == NULL) a = 0;
+	else a = raiz->N;
+}
+
+
 void find(const string& elem, bool& found, nodo_rbst* x){
 	if(x != NULL){
 		if (x->_k < elem) find(elem, found, x->_der);
@@ -275,6 +281,12 @@ int main(){
 		}
 		else if (op == "card"){
 			cin >> id_set1;
+			it = sets.find(id_set1);
+			if(it == sets.end()) cout << "ERROR" << endl;
+			else {
+				sets[id_set1].card(i);
+				cout << i << endl;
+			}
 		}
 		else if (op == "nth"){
 			cin >> id_set1 >> i;
