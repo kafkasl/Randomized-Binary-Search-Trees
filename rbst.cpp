@@ -242,7 +242,8 @@ int main(){
 			if(it == sets.end()){
 				cout << "ERROR" << endl;
 			} else {
-				sets[id_set1].put(elem);
+				sets[id_set1].cont(elem, error);
+				if(error == false)sets[id_set1].put(elem);
 				cout << "OK" << endl;	
 			}
 		}
