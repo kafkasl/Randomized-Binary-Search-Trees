@@ -188,7 +188,9 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
 	cerr << "insert at root";
 	nodo_rbst* raiz_izq, *raiz_der, *ins_izq, *ins_der;
 	raiz_izq = raiz_der = ins_izq = ins_der = NULL;
+    bool contar = false;
 	while ( arbre != NULL){
+        contar = true;
 		if(x > arbre->_k){
 			if(raiz_izq == NULL){raiz_izq = arbre; ins_izq = arbre;}
 			else { ins_izq->_der = arbre; ins_izq = ins_izq->_der;}
@@ -205,11 +207,35 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
 	nou->_izq = raiz_izq;
 	nou->_der = raiz_der;
 	nou->_k = x;
-	cerr << "...done" << endl;
+	if(contar) {
+        nou->N = 1 + contarizk(nou->_izq) + contardre(nou->_der);
+    }
+    else nou->N = 1;
+    cerr << "...done" << endl;
 	return nou;
-	
-
 }
+    
+    
+    int contarizk(nodo_rbst* abc){
+        int res = 0;
+        if(abc != NULL) {
+            ++res;
+            res+= contarizk(abc->_der);
+            if(abc->_izq != NULL) res=+(abc->_izq)->N;
+        }
+        return res;
+    }
+    
+    int contardre(nodo_rbst* abc){
+        int res = 0;
+        if(abc != NULL) {
+            ++res;
+            res+= contardre(abc->_izq);
+            if(abc->_der != NULL) res=+(abc->_der)->N;
+        }
+        return res;
+    }
+    
 
 };
 
