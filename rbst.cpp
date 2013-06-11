@@ -252,6 +252,7 @@ int main(){
 		}
 		else if (op == "cont"){
 			cin >> id_set1 >> elem;
+			cout << "> " << op << " " << id_set1 << " " << elem << endl;
 			it = sets.find(id_set1);
 			if(it == sets.end()) cout << "ERROR" << endl;
 			else {
@@ -272,16 +273,15 @@ int main(){
 				if (it == sets.end())cout << "ERROR" << endl;
 				else {
 					sets[id_set2].all(res,error);
-					if(error == false){
-						for(int i = 0; i < res.size(); ++i)sets[id_set1].put(res[i]);
-						sets[id_set2].init();
-						cout << "OK" << endl;
-					} else cout << "ERROR" << endl;
+					if(error == false)for(int i = 0; i < res.size(); ++i)	sets[id_set1].put(res[i]);
+					sets[id_set2].init();
+					cout << "OK" << endl;
 				}
 			}
 		}
 		else if (op == "card"){
 			cin >> id_set1;
+			cout << "> " << op << " " << id_set1 << endl;
 			it = sets.find(id_set1);
 			if(it == sets.end()) cout << "ERROR" << endl;
 			else {
