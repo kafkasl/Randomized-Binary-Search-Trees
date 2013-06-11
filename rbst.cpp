@@ -35,6 +35,21 @@ void init(){
 	raiz = NULL;
 }
 
+void find(const string& elem, bool& found, nodo_rbst* x){
+	if(x != NULL){
+		if (x->_k < elem) find(elem, found, x->_der);
+		else if(x->_k > elem) find(elem, found, x->_izq);
+		else found = true;
+	}
+}
+
+void cont(const string& x, bool& found){
+	found = false;
+	if(raiz != NULL){
+		find(x, found, raiz);
+	}
+}
+
 void deleteRbst(nodo_rbst* x){
 	if(x->_izq != NULL)deleteRbst(x->_izq);
 	if(x->_der != NULL)deleteRbst(x->_der);
@@ -77,6 +92,7 @@ void greater(int& res, const string& max, nodo_rbst* x){
 
 
 void between(vector<string>& res, const string& min, const string& max, bool& error){
+	res.clear();
 	error = false;
 	if(raiz != NULL) interval(res, min, max, raiz); 
 	else error = true;
@@ -126,6 +142,7 @@ void listAll(nodo_rbst* x, vector<string>& res){
 }
 
 void all(vector<string>& all, bool& error){
+	all.clear();
 	if(raiz != NULL){
 		listAll(raiz, all);	
 		error = false;
@@ -228,10 +245,33 @@ int main(){
 		}
 		else if (op == "cont"){
 			cin >> id_set1 >> elem;
+			it = sets.find(id_set1);
+			if(it == sets.end()) cout << "ERROR" << endl;
+			else {
+				bool found;
+				sets[id_set1].cont(elem, found);
+				if(found) cout << "true" << endl;
+				else cout << "false" << endl;
+			}
 			
 		}
 		else if (op == "merge"){
 			cin >> id_set1 >> id_set2;
+			cout << "> " << op << " " << id_set1 << " " << id_set2 << endl;
+			it = sets.find(id_set1);
+			if(it == sets.end()) cout << "ERROR" << endl;
+			else {
+				it = sets.find(id_set2);
+				if (it == sets.end())cout << "ERROR" << endl;
+				else {
+					sets[id_set2].all(res,error);
+					if(error == false){
+						for(int i = 0; i < res.size(); ++i)sets[id_set1].put(res[i]);
+						sets[id_set2].init();
+						cout << "OK" << endl;
+					} else cout << "ERROR" << endl;
+				}
+			}
 		}
 		else if (op == "card"){
 			cin >> id_set1;
