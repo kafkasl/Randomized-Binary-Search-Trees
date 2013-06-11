@@ -220,8 +220,7 @@ int main(){
 	int i;
 	vector<string> res;
 	bool error;
-	while(1){
-		cin >> op;
+	while(cin >> op){
 		if(op == "init"){
 			cin >> id_set1;
 			cout << "> " << op << " " << id_set1 << endl;
@@ -273,7 +272,10 @@ int main(){
 				if (it == sets.end())cout << "ERROR" << endl;
 				else {
 					sets[id_set2].all(res,error);
-					if(error == false)for(int i = 0; i < res.size(); ++i)	sets[id_set1].put(res[i]);
+					if(error == false)for(int i = 0; i < res.size(); ++i){
+						sets[id_set1].cont(res[i], error);
+						if( error == false)sets[id_set1].put(res[i]);
+					}
 					sets[id_set2].init();
 					cout << "OK" << endl;
 				}
@@ -325,6 +327,7 @@ int main(){
 		}
 		else if (op == "min"){
 			cin >> id_set1;
+			cout << "> " << op << " " << id_set1 << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
 				sets[id_set1].min(elem, error);
@@ -334,6 +337,7 @@ int main(){
 		}
 		else if (op == "max"){
 			cin >> id_set1;
+			cout << "> " << op << " " << id_set1 << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
 				sets[id_set1].max(elem, error);
@@ -343,6 +347,7 @@ int main(){
 		}
 		else if (op == "all"){
 			cin >> id_set1;
+			cout << "> " << op << " " << id_set1 << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
 				sets[id_set1].all(res, error);
