@@ -330,9 +330,9 @@ int main(){
 				sets[id_set1].cont(elem, error);
 				if(error == false)sets[id_set1].put(elem);
 				cout << "OK" << endl;
-                sets[id_set1].escriuArbre();
-                cout << endl;
-            }
+                		sets[id_set1].escriuArbre();
+               			cout << endl;
+            	}
             
 		}
 		else if (op == "del"){
@@ -382,10 +382,18 @@ int main(){
 		}
 		else if (op == "nth"){
 			cin >> id_set1 >> i;
-            cout << sets[id_set1].iessim(i) << endl;
+			cout << "> " << op << " " << id_set1 << " " << elem << endl;
+			it = sets.find(id_set1);
+			if(it != sets.end()){
+				int n;
+				sets[id_set1].card(n);
+				if( i < 1 or i > n) cout << "ERROR" << endl;
+            			else cout << sets[id_set1].iessim(i) << endl;
+			} else cout << "ERROR" << endl;
         }
 		else if (op == "leq"){{
 			cin >> id_set1 >> elem;
+			cout << "> " << op << " " << id_set1 << " " << elem << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
 				sets[id_set1].leq(i, elem, error);
@@ -396,6 +404,7 @@ int main(){
 		}
 		else if (op == "gt"){
 			cin >> id_set1 >> elem;
+			cout << "> " << op << " " << id_set1 << " " << elem << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
 				sets[id_set1].gt(i, elem, error);
@@ -405,6 +414,7 @@ int main(){
 		}
 		else if (op == "between"){
 			cin >> id_set1 >> elem >> elem2;
+			cout << "> " << op << " " << id_set1 << " " << elem << " " << elem2 << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
 				sets[id_set1].between(res, elem, elem2, error);
@@ -448,11 +458,14 @@ int main(){
 				} else cout << "ERROR" << endl;
 			} else cout << "ERROR" << endl;
 		}
-        
-        else if(op == "delete") {
-            cin >> id_set1 >> elem;
-            sets[id_set1].delete_element(elem);
-            cout << "eleiminado << endl";
-        }
+        	else if(op == "delete") {
+            		cin >> id_set1 >> elem;
+			cout << "> " << op << " " << id_set1 << " " << elem << endl;
+			it = sets.find(id_set1);
+			if(it != sets.end()){
+            			sets[id_set1].delete_element(elem);
+				cout << "OK" << endl;
+			} else cout << "ERROR" << endl;
+        	}
 	}
 }
