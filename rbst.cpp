@@ -38,6 +38,7 @@ void init(){
 void card(int& a){
 	if(raiz == NULL) a = 0;
 	else a = raiz->N;
+    cout << raiz->_k << endl;
 }
 
 
@@ -180,6 +181,11 @@ nodo_rbst* insert(const string& x, nodo_rbst* T) {
 	else{
 		T->_der = insert(x, T->_der);
 	}
+    int auxizq,auxder;
+    auxizq = auxder = 0;
+    if(T->_izq != NULL) auxizq = T->_izq->N;
+    if(T->_der != NULL) auxder = T->_der->N;
+    T->N = 1 + auxizq + auxder;
 	return T;
 }
 
@@ -208,32 +214,16 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
 	nou->_der = raiz_der;
 	nou->_k = x;
 	if(contar) {
-        nou->N = 1 + contarizk(nou->_izq) + contardre(nou->_der);
+        nou->N = counter(nou);
     }
     else nou->N = 1;
     cerr << "...done" << endl;
 	return nou;
 }
     
-    
-    int contarizk(nodo_rbst* abc){
-        int res = 0;
-        if(abc != NULL) {
-            ++res;
-            res+= contarizk(abc->_der);
-            if(abc->_izq != NULL) res=+(abc->_izq)->N;
-        }
-        return res;
-    }
-    
-    int contardre(nodo_rbst* abc){
-        int res = 0;
-        if(abc != NULL) {
-            ++res;
-            res+= contardre(abc->_izq);
-            if(abc->_der != NULL) res=+(abc->_der)->N;
-        }
-        return res;
+    int counter(nodo_rbst* abc) {
+        if(abc == NULL) return 0;
+        else return 1 + counter(abc->_izq) + counter(abc->_der);
     }
     
     
@@ -244,22 +234,27 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
     nodo_rbst* findAndDelete(string elem, nodo_rbst* x){
         if(x == NULL) return NULL;
         else {
-            if (x->_k < elem) findAndDelete(elem, x->_der);
-            else if(x->_k > elem) findAndDelete(elem, x->_izq);
+            if (x->_k < elem) x->_der = findAndDelete(elem, x->_der);
+            else if(x->_k > elem) x->_izq = findAndDelete(elem, x->_izq);
             else {
                 nodo_rbst* aux;
                 aux = joinToDelete(x->_izq, x->_der);
                 x = aux;
             }
+            return x;
         }
-        return x;
+        
     }
     
     nodo_rbst* joinToDelete(nodo_rbst* L, nodo_rbst* R){
+       // cout << "LLEGO HASTA AQUI" << endl;
         int m,n,r,total;
-        m = L->N;
-        n = R->N;
+        m = n = 0;
+        if (L != NULL) m = L->N;
+        if(R != NULL) n = R->N;
+        
         total = n + m;
+        if (total == 0)return NULL;
         r = rand() % (total - 1);
         if(r < m) {
             L->_der = joinToDelete(L->_der, R);
@@ -270,7 +265,38 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
             return R;
         }
     }
-
+    
+    string iessim(int i) {
+        if(i < 1 or i > raiz->N) return "ERROR";
+        else {
+            return nthFunction(i,raiz,0);
+        }
+    }
+    
+    string nthFunction(int i, nodo_rbst *arbre,int count){
+        int aux = count+1;
+        if(arbre->_izq != NULL) aux+=arbre->_izq->N;
+        if(i == aux) return arbre->_k;
+        else if(arbre->_der == NULL) return nthFunction(i,arbre->_izq,count);
+        else if(arbre->_izq == NULL) return nthFunction(i,arbre->_der,count+1);
+        else {
+            if(i < aux) return  nthFunction(i,arbre->_izq,count);
+            else return nthFunction(i,arbre->_der,aux);
+        }
+    }
+    
+    void escriuArbre(nodo_rbst* nodo) {
+        if(nodo->_izq!= NULL) escriuArbre(nodo->_izq);
+        
+        cout << nodo->N << ',' << ' ';
+        
+        if(nodo->_der != NULL) escriuArbre(nodo->_der);
+    }
+    
+    void escriuArbre(){
+        escriuArbre(raiz);
+    }
+    
 };
 
 int main(){
@@ -303,8 +329,11 @@ int main(){
 			} else {
 				sets[id_set1].cont(elem, error);
 				if(error == false)sets[id_set1].put(elem);
-				cout << "OK" << endl;	
-			}
+				cout << "OK" << endl;
+                sets[id_set1].escriuArbre();
+                cout << endl;
+            }
+            
 		}
 		else if (op == "del"){
 			cin >> id_set1 >> elem;
@@ -353,7 +382,8 @@ int main(){
 		}
 		else if (op == "nth"){
 			cin >> id_set1 >> i;
-		}
+            cout << sets[id_set1].iessim(i) << endl;
+        }
 		else if (op == "leq"){{
 			cin >> id_set1 >> elem;
 			it = sets.find(id_set1);
@@ -418,5 +448,11 @@ int main(){
 				} else cout << "ERROR" << endl;
 			} else cout << "ERROR" << endl;
 		}
+        
+        else if(op == "delete") {
+            cin >> id_set1 >> elem;
+            sets[id_set1].delete_element(elem);
+            cout << "eleiminado << endl";
+        }
 	}
 }
