@@ -236,6 +236,40 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
         return res;
     }
     
+    
+    void delete_element(string x){
+        raiz = findAndDelete(x,raiz);
+    }
+    
+    nodo_rbst* findAndDelete(string elem, nodo_rbst* x){
+        if(x == NULL) return NULL;
+        else {
+            if (x->_k < elem) findAndDelete(elem, x->_der);
+            else if(x->_k > elem) findAndDelete(elem, x->_izq);
+            else {
+                nodo_rbst* aux;
+                aux = joinToDelete(x->_izq, x->_der);
+                x = aux;
+            }
+        }
+        return x;
+    }
+    
+    nodo_rbst* joinToDelete(nodo_rbst* L, nodo_rbst* R){
+        int m,n,r,total;
+        m = L->N;
+        n = R->N;
+        total = n + m;
+        r = rand() % (total - 1);
+        if(r < m) {
+            L->_der = joinToDelete(L->_der, R);
+            return L;
+        }
+        else {
+            R->_izq = joinToDelete(L,R->_izq);
+            return R;
+        }
+    }
 
 };
 
