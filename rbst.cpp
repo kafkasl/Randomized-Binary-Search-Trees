@@ -335,9 +335,6 @@ int main(){
             	}
             
 		}
-		else if (op == "del"){
-			cin >> id_set1 >> elem;
-		}
 		else if (op == "cont"){
 			cin >> id_set1 >> elem;
 			cout << "> " << op << " " << id_set1 << " " << elem << endl;
@@ -458,7 +455,7 @@ int main(){
 				} else cout << "ERROR" << endl;
 			} else cout << "ERROR" << endl;
 		}
-        	else if(op == "delete") {
+        	else if(op == "del") {
             		cin >> id_set1 >> elem;
 			cout << "> " << op << " " << id_set1 << " " << elem << endl;
 			it = sets.find(id_set1);
