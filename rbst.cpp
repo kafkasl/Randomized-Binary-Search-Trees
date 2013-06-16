@@ -38,7 +38,7 @@ void init(){
 void card(int& a){
 	if(raiz == NULL) a = 0;
 	else a = raiz->N;
-    cout << raiz->_k << endl;
+    //cout << raiz->_k << endl;
 }
 
 
@@ -73,7 +73,7 @@ void gt(int & total, const string& min, bool& error){
 }
 
 void lesser(int& res, const string& min, nodo_rbst* x){
-	if(x != NULL and x->_k < min){
+	if(x != NULL and x->_k <= min){
 		lesser(res, min, x->_izq);
 		++res;
 		lesser(res, min, x->_der);
@@ -90,7 +90,7 @@ void leq(int& res, const string& max, bool& error){
 }
 
 void greater(int& res, const string& max, nodo_rbst* x){
-	if(x != NULL and x->_k > max){
+	if(x != NULL and x->_k >= max){
 		greater(res, max, x->_der);
 		++res;
 		greater(res, max, x->_izq);
@@ -107,30 +107,32 @@ void between(vector<string>& res, const string& min, const string& max, bool& er
 
 
 void interval(vector<string>& res, const string& min, const string& max, nodo_rbst* x){
-	if(x->_k >= min)interval(res, min, max, x->_izq);
-	res.push_back(x->_k);
-	if(x->_k <= max)interval(res, min, max, x->_der);
+    if(x != NULL){
+        if(x->_k >= min)interval(res, min, max, x->_izq);
+        res.push_back(x->_k);
+        if(x->_k <= max)interval(res, min, max, x->_der);
+    }
 }
 
 void min(string& min, bool& error){
-	cerr << "min" << endl;
+	//cerr << "min" << endl;
 	if(raiz == NULL) error = true;
 	else {
-	cerr << "root not null" << endl;
+	//cerr << "root not null" << endl;
 		nodo_rbst* act = raiz;
 		while (act->_izq != NULL){
-			cerr << "evaluating: " << act->_izq->_k;
+			//cerr << "evaluating: " << act->_izq->_k;
 			act = act->_izq;
-			cerr << "...done" << endl;
+			//cerr << "...done" << endl;
 		}
-		cerr << "min found" << endl;
+		//cerr << "min found" << endl;
 		min = act->_k;
 		error = false;
 	}
 }
 
 void max(string& max, bool& error){
-	cerr << "max" << endl;
+	//cerr << "max" << endl;
 	if(raiz == NULL) error = true;
 	else {
 	nodo_rbst* act = raiz;
@@ -158,9 +160,9 @@ void all(vector<string>& all, bool& error){
 }
 
 void put(const string& x){
-	cerr << "Put";
+	//cerr << "Put";
 	raiz = insert(x, raiz);
-	cerr << "...done" << endl;
+	//cerr << "...done" << endl;
 }
 
 
@@ -169,7 +171,7 @@ nodo_rbst* insert(const string& x, nodo_rbst* T) {
 	if(T == NULL) return insert_at_root(x,T);
 	int n, r;
 	n = T->N;
-	cerr << "Insert" << endl;
+	//cerr << "Insert" << endl;
 	r = rand() % (n + 1);
 	cerr << r << endl;
 	if (r == n)
@@ -191,7 +193,7 @@ nodo_rbst* insert(const string& x, nodo_rbst* T) {
 
 
 nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
-	cerr << "insert at root";
+	//cerr << "insert at root";
 	nodo_rbst* raiz_izq, *raiz_der, *ins_izq, *ins_der;
 	raiz_izq = raiz_der = ins_izq = ins_der = NULL;
     bool contar = false;
@@ -214,16 +216,43 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
 	nou->_der = raiz_der;
 	nou->_k = x;
 	if(contar) {
-        nou->N = counter(nou);
+        nou->N = counter(nou->_izq)+ counter(nou->_der)+1;
+        //nou->N = contarizk(nou->_izq)+ contardre(nou->_der)+1;
     }
     else nou->N = 1;
-    cerr << "...done" << endl;
+    //cerr << "...done" << endl;
 	return nou;
 }
     
+    
+    int contarizk(nodo_rbst* abc){
+        int res = 0;
+        if(abc != NULL) {
+            ++res;
+            res+= contarizk(abc->_der);
+            if(abc->_izq != NULL) res=+(abc->_izq)->N;
+            abc->N = res;
+        }
+        return res;
+    }
+    
+    int contardre(nodo_rbst* abc){
+        int res = 0;
+        if(abc != NULL) {
+            ++res;
+            res+= contardre(abc->_izq);
+            if(abc->_der != NULL) res=+(abc->_der)->N;
+            abc->N = res;
+        }
+        return res;
+    }
+    
     int counter(nodo_rbst* abc) {
         if(abc == NULL) return 0;
-        else return 1 + counter(abc->_izq) + counter(abc->_der);
+        else {
+            abc->N = 1 + counter(abc->_izq) + counter(abc->_der);
+            return abc->N;
+        }
     }
     
     
@@ -234,12 +263,13 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
     nodo_rbst* findAndDelete(string elem, nodo_rbst* x){
         if(x == NULL) return NULL;
         else {
-            if (x->_k < elem) x->_der = findAndDelete(elem, x->_der);
-            else if(x->_k > elem) x->_izq = findAndDelete(elem, x->_izq);
+            if (x->_k < elem) {x->_der = findAndDelete(elem, x->_der);--(x->N);}
+            else if(x->_k > elem){ x->_izq = findAndDelete(elem, x->_izq);--(x->N);}
             else {
                 nodo_rbst* aux;
                 aux = joinToDelete(x->_izq, x->_der);
                 x = aux;
+                counter(x);
             }
             return x;
         }
@@ -288,7 +318,7 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
     void escriuArbre(nodo_rbst* nodo) {
         if(nodo->_izq!= NULL) escriuArbre(nodo->_izq);
         
-        cout << nodo->N << ',' << ' ';
+       // cout << nodo->N << ',' << ' ';
         
         if(nodo->_der != NULL) escriuArbre(nodo->_der);
     }
@@ -379,7 +409,7 @@ int main(){
 		}
 		else if (op == "nth"){
 			cin >> id_set1 >> i;
-			cout << "> " << op << " " << id_set1 << " " << elem << endl;
+			cout << "> " << op << " " << id_set1 << " " << i << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
 				int n;
