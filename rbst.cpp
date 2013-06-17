@@ -292,7 +292,8 @@ nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre ){
         
         total = n + m;
         if (total == 0)return NULL;
-        r = rand() % (total - 1);
+        if(total == 1) r = 1;
+        else r = rand() % (total - 1);
         if(r < m) {
             L->_der = joinToDelete(L->_der, R);
             return L;
