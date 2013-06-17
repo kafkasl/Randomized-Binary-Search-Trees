@@ -30,18 +30,25 @@ nodo_rbst* raiz;
 
 public:
 
+//pre: -
+//post: si la classe contenia un arbol este se elimina y raiz = NULL, si no tenia arbol se queda como estaba
+//coste: maximo N (borrar todo los nodos del arbol)
 void init(){
 	if(raiz != NULL) deleteRbst(raiz);
 	raiz = NULL;
 }
 
+
+//pre: -
+//post: a = numero de nodos del rbst
+//coste: 1
 void card(int& a){
 	if(raiz == NULL) a = 0;
 	else a = raiz->N;
     //cout << raiz->_k << endl;
 }
 
-
+//pre: 
 void find(const string& elem, bool& found, nodo_rbst* x){
 	if(x != NULL){
 		if (x->_k < elem) find(elem, found, x->_der);
@@ -157,10 +164,12 @@ void all(vector<string>& all){
 	}
 }
 
+
+//pre: -
+//post: el elemento x se inserta en el rbst
+//cost: FALTAAAAA 
 void put(const string& x){
-	//cerr << "Put";
 	raiz = insert(x, raiz);
-	//cerr << "...done" << endl;
 }
 
 
