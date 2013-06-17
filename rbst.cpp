@@ -150,13 +150,11 @@ void listAll(nodo_rbst* x, vector<string>& res){
 	if(x->_der != NULL)listAll(x->_der, res);
 }
 
-void all(vector<string>& all, bool& error){
+void all(vector<string>& all){
 	all.clear();
 	if(raiz != NULL){
 		listAll(raiz, all);	
-		error = false;
 	}
-	else error = true;
 }
 
 void put(const string& x){
@@ -361,7 +359,6 @@ int main(){
 				if(error == false)sets[id_set1].put(elem);
 				cout << "OK" << endl;
                 		sets[id_set1].escriuArbre();
-               			cout << endl;
             	}
             
 		}
@@ -387,7 +384,7 @@ int main(){
 				it = sets.find(id_set2);
 				if (it == sets.end())cout << "ERROR" << endl;
 				else {
-					sets[id_set2].all(res,error);
+					sets[id_set2].all(res);
 					if(error == false)for(int i = 0; i < res.size(); ++i){
 						sets[id_set1].cont(res[i], error);
 						if( error == false)sets[id_set1].put(res[i]);
@@ -417,8 +414,8 @@ int main(){
 				if( i < 1 or i > n) cout << "ERROR" << endl;
             			else cout << sets[id_set1].iessim(i) << endl;
 			} else cout << "ERROR" << endl;
-        }
-		else if (op == "leq"){{
+        	}
+		else if (op == "leq"){
 			cin >> id_set1 >> elem;
 			cout << "> " << op << " " << id_set1 << " " << elem << endl;
 			it = sets.find(id_set1);
@@ -427,7 +424,7 @@ int main(){
 				if(error == false) cout << i << endl;
 				else cout << "ERROR" << endl;
 			} else cout << "ERROR" << endl;
-		}
+		
 		}
 		else if (op == "gt"){
 			cin >> id_set1 >> elem;
@@ -477,10 +474,13 @@ int main(){
 			cout << "> " << op << " " << id_set1 << endl;
 			it = sets.find(id_set1);
 			if(it != sets.end()){
-				sets[id_set1].all(res, error);
+				sets[id_set1].all(res);
 				if (error == false) {
-					cout << "[" << res[0];
-					for(int i = 1; i < res.size(); ++i)cout << "," << res[i];
+					cout << "[";
+					if(res.size() > 0) {
+						res[0];
+						for(int i = 1; i < res.size(); ++i)cout << "," << res[i];
+					}
 					cout << "]" << endl;
 				} else cout << "ERROR" << endl;
 			} else cout << "ERROR" << endl;
