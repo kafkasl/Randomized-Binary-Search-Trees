@@ -359,8 +359,7 @@ int main(){
 				if(error == false)sets[id_set1].put(elem);
 				cout << "OK" << endl;
                 		sets[id_set1].escriuArbre();
-            	}
-            
+            		}
 		}
 		else if (op == "cont"){
 			cin >> id_set1 >> elem;
@@ -424,7 +423,6 @@ int main(){
 				if(error == false) cout << i << endl;
 				else cout << "ERROR" << endl;
 			} else cout << "ERROR" << endl;
-		
 		}
 		else if (op == "gt"){
 			cin >> id_set1 >> elem;
@@ -478,7 +476,7 @@ int main(){
 				if (error == false) {
 					cout << "[";
 					if(res.size() > 0) {
-						res[0];
+						cout << res[0];
 						for(int i = 1; i < res.size(); ++i)cout << "," << res[i];
 					}
 					cout << "]" << endl;
