@@ -48,7 +48,9 @@ public:
         //cout << raiz->_k << endl;
     }
     
-    //pre:
+//pre: x es un nodo valido del rbst
+//post: si se ha encontrado el elemento -> found = true else found = false
+//cost: log (N) la altura mayor del arbol, que siendo un rbst consideramos log N
     void find(const string& elem, bool& found, nodo_rbst* x){
         if(x != NULL){
             if (x->_k < elem) find(elem, found, x->_der);
@@ -56,7 +58,10 @@ public:
             else found = true;
         }
     }
-    
+   
+//pre: -
+//post: si string pertenece al rbst -> found = true else found = false
+//cost: es el coste de find + la llamada que es negligible. 
     void cont(const string& x, bool& found){
         found = false;
         if(raiz != NULL){
@@ -64,12 +69,20 @@ public:
         }
     }
     
+
+//pre: x es un nodo valido
+//post: x y todo el subarbol contenido por el y sus hijos es eliminado
+//cost: N (hay que borrar todo el arbol)
     void deleteRbst(nodo_rbst* x){
         if(x->_izq != NULL)deleteRbst(x->_izq);
         if(x->_der != NULL)deleteRbst(x->_der);
         delete x;
     }
     
+
+//pre: -
+//post: si el arbol es valido -> error = false, total = numero de elementos mayores que min, else -> error = true
+//cost: es el coste de la funcion greater + la llamada (negligible) 
     void gt(int & total, const string& min, bool& error){
         if(raiz != NULL){
             total = 0;
@@ -78,7 +91,11 @@ public:
         }
         else error = true;
     }
-    
+   
+
+//pre: -
+//post: si el arbol es valido -> error = false, total = numero de elementos inferiors que max, else -> error = true
+//cost: cota superior de log N para encontrar el primer menor que max + el coste de recorrer los b menores que el. 
     void lesser(int& res, const string& min, nodo_rbst* x){
         if(x != NULL) {
             lesser(res, min, x->_izq);
@@ -89,6 +106,9 @@ public:
         }
     }
     
+//pre: -
+//post: si el arbol es valido -> error = false, total = numero de elementos inferiors que max, else -> error = true
+//cost: es el coste de la funcion lesser + la llamada (negligible) 
     void leq(int& res, const string& max, bool& error){
         if(raiz != NULL){
             res = 0;
@@ -98,6 +118,9 @@ public:
         else error = true;
     }
     
+//pre: -
+//post: si el arbol es valido -> error = false, total = numero de elementos mayores que min, else -> error = true
+//cost: cota superior de log N para encontrar el primer mayor + el coste de recorrer los b mayores que el. 
     void greater(int& res, const string& max, nodo_rbst* x){
         if(x != NULL) {
             greater(res, max, x->_der);
@@ -109,7 +132,10 @@ public:
         
     }
     
-    
+   
+//pre: -
+//post: si el arbol contiene elementos -> error = false & res contiene un vector ordenado con los elementos comprendidos entre min y max, else error = true
+//cost: coste de la funcion interval + llamada (negligible) 
     void between(vector<string>& res, const string& min, const string& max, bool& error){
         res.clear();
         error = false;
@@ -118,6 +144,10 @@ public:
     }
     
     
+
+//pre: -
+//post: res contiene todos los elementos del rbst (total) mayores que min e inferiores que max
+//cost: log N para encontrar el primero mayo que min + recorrer los b nodos inferiores que max = (log N) + b
     void interval(vector<string>& res, const string& min, const string& max, nodo_rbst* x){
         if(x != NULL){
             if(x->_k >= min) interval(res, min, max, x->_izq);
@@ -126,23 +156,26 @@ public:
         }
     }
     
+
+//pre: -
+//post: si el arbol tiene elementos -> error = false & min es el elemento minimo del arbol, else error = true
+//cost: cota superior = altura del arbol (cota superior log N) si altura rbst = N 
     void min(string& min, bool& error){
-        //cerr << "min" << endl;
         if(raiz == NULL) error = true;
         else {
-            //cerr << "root not null" << endl;
             nodo_rbst* act = raiz;
             while (act->_izq != NULL){
-                //cerr << "evaluating: " << act->_izq->_k;
                 act = act->_izq;
-                //cerr << "...done" << endl;
             }
-            //cerr << "min found" << endl;
             min = act->_k;
             error = false;
         }
     }
-    
+   
+ 
+//pre: -
+//post: si el arbol tiene elementos -> error = false & max es el elemento maximo del arbol, else error = true
+//cost: cota superior = altura del arbol (cota superior log N) si altura rbst = N 
     void max(string& max, bool& error){
         //cerr << "max" << endl;
         if(raiz == NULL) error = true;
@@ -155,7 +188,11 @@ public:
             error = false;
         }
     }
-    
+   
+
+//pre: -
+//post: res contiene todos los elementos del arbol rbst
+//cost: esta funcion es un recorrido en inorden del arbol asi que su coste es cota de N, siendo N el total de elementos 
     void listAll(nodo_rbst* x, vector<string>& res){
         if(x->_izq != NULL)listAll(x->_izq, res);
         res.push_back(x->_k);
@@ -169,10 +206,9 @@ public:
         }
     }
     
-    
-    //pre: -
-    //post: el elemento x se inserta en el rbst
-    //cost: FALTAAAAA
+//pre: el rbst no contiene x
+//post: el rbst contiene x
+//cost: coste de la funcion insert + llamada (negligible)    
     void put(const string& x){
         bool insertat = false;
         raiz = insert(x, raiz,insertat);
@@ -180,6 +216,9 @@ public:
     
     
     
+//pre: -
+//post: el elemento x se inserta en el rbst
+//cost: coste de encontrar sitio para insertar + coste de insertarlo -> cota superior = altura arbol + coste insert_at_root 
     nodo_rbst* insert(const string& x, nodo_rbst* T, bool& insertat) {
         if(T == NULL) return insert_at_root(x,T,insertat);
         int  r;
@@ -193,7 +232,10 @@ public:
         return T;
     }
     
-    
+
+//pre: arbre no contiene x
+//post: devuelve un arbol t' cuya raiz es el elemento x a insertar y su hijo izquierdo son los elementos de arbre menos que x y el derecho los mayores
+//cost: coste de la llamada a faux + comprobacions y llamada (negligible)
     nodo_rbst* insert_at_root(const string& x, nodo_rbst* arbre, bool& insertat ){
         nodo_rbst* raiz_izq, *raiz_der;
         raiz_izq = raiz_der = NULL;
@@ -213,7 +255,7 @@ public:
         return nou;
     }
     
-    void faux(const string& x, nodo_rbst* arbre, nodo_rbst*& raiz_izq, nodo_rbst*& raiz_der, nodo_rbst* ins_izq, nodo_rbst* ins_der) {
+    void faux(const string& x, nodo_rbst* & arbre, nodo_rbst*& raiz_izq, nodo_rbst*& raiz_der, nodo_rbst* &ins_izq, nodo_rbst* &ins_der) {
        if(arbre != NULL) {
             if(x > arbre->_k){
                 if(raiz_izq == NULL){raiz_izq = arbre; ins_izq = arbre;}
@@ -276,6 +318,10 @@ public:
         
     }
     
+
+//pre: elem es un elemento del rbst y x es valido
+//post: devuelve el arbol resultante de eliminar elem de x y reestructurarlo
+//cost coste de encontrar el elemento + coste de borrarlo y reestructurar el arbol = cota superior log N (altura rbst == log N) + coste de llamar a joinToDelete
     nodo_rbst* findAndDelete(string elem, nodo_rbst* x){
         if(x == NULL) return NULL;
         else {
@@ -293,6 +339,10 @@ public:
         
     }
     
+
+//pre: L i R son dos nodos validos del rbst
+//post: devuelve un nuevo nodo n' que es el resultado de unir L y R en un nuevo arbol
+//cost: 
     nodo_rbst* joinToDelete(nodo_rbst* L, nodo_rbst* R){
         int m,n,r,total;
         m = n = 0;
@@ -312,13 +362,19 @@ public:
         }
     }
     
+//pre: -
+//post: string es el elemtno i-essimo si este es un indice valido, sino string es = "ERROR"
+//cost: es el coste de nthFunction mas su llamada que es negligible.
     string iessim(int i) {
         if(i < 1 or i > raiz->N) return "ERROR";
         else {
             return nthFunction(i,raiz,0);
         }
     }
-    
+   
+//pre: 	0 <= i < N, arbre es la raiz del arbol
+//post: string es la palabra i-essima del arbol
+//cost: cota superior (log N) suponiendo que en general el arbol tiene de altura log N  
     string nthFunction(int i, nodo_rbst *arbre,int count){
         int aux = count+1;
         if(arbre->_izq != NULL) aux+=arbre->_izq->N;
@@ -330,7 +386,8 @@ public:
             else return nthFunction(i,arbre->_der,aux);
         }
     }
-    
+
+//funcion de prueba auxiliar no usada en la entrega    
     void escriuArbre(nodo_rbst* nodo) {
         if(nodo->_izq!= NULL) escriuArbre(nodo->_izq);
         
@@ -339,6 +396,7 @@ public:
         if(nodo->_der != NULL) escriuArbre(nodo->_der);
     }
     
+//funcion de prueba auxiliar no usada en la entrega    
     void escriuArbre(){
         escriuArbre(raiz);
     }
