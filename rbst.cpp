@@ -1,3 +1,20 @@
+/*************************************
+
+
+AUTORES:
+
+Pol Alvarez Vecino
+
+Jordi Montes Sanabria
+
+
+
+***************************************/
+
+
+
+
+
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>
