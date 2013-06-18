@@ -198,35 +198,40 @@ public:
         nodo_rbst* raiz_izq, *raiz_der;
         raiz_izq = raiz_der = NULL;
         insertat = true;
-        bool contar = false;
         if(arbre != NULL) {
             nodo_rbst* ins_izq, *ins_der;
             ins_izq = ins_der = NULL;
-            while ( arbre != NULL){
-                contar = true;
-                if(x > arbre->_k){
-                    if(raiz_izq == NULL){raiz_izq = arbre; ins_izq = arbre;}
-                    else { ins_izq->_der = arbre; ins_izq = ins_izq->_der;}
-                    arbre = arbre->_der;
-                    ins_izq->_der = NULL;
-                }
-                else if (x < arbre->_k){
-                    if(raiz_der == NULL){raiz_der = arbre; ins_der = arbre;}
-                    else { ins_der->_izq = arbre; ins_der = ins_der->_izq;}
-                    arbre = arbre->_izq;
-                    ins_der->_izq = NULL;
-                }
-            }
+            faux(x, arbre, raiz_izq, raiz_der, ins_izq, ins_der);
         }
         nodo_rbst* nou = new nodo_rbst();
         nou->_izq = raiz_izq;
         nou->_der = raiz_der;
         nou->_k = x;
-        if(contar) {
-            nou->N = contarizk(nou->_izq) + contardre(nou->_der)+1;
-        }
-        else nou->N = 1;
+        nou->N = 1;
+        if(nou->_izq != NULL) nou->N += nou->_izq->N;
+        if(nou->_der != NULL) nou->N += nou->_der->N;
         return nou;
+    }
+    
+    void faux(const string& x, nodo_rbst* arbre, nodo_rbst*& raiz_izq, nodo_rbst*& raiz_der, nodo_rbst* ins_izq, nodo_rbst* ins_der) {
+       if(arbre != NULL) {
+            if(x > arbre->_k){
+                if(raiz_izq == NULL){raiz_izq = arbre; ins_izq = arbre;}
+                else { ins_izq->_der = arbre; ins_izq = ins_izq->_der;}
+                ins_izq->_der = NULL;
+                faux(x, arbre->_der, raiz_izq, raiz_der, ins_izq, ins_der);
+                
+            }
+            else if (x < arbre->_k){
+                if(raiz_der == NULL){raiz_der = arbre; ins_der = arbre;}
+                else { ins_der->_izq = arbre; ins_der = ins_der->_izq;}
+                ins_der->_izq = NULL;
+                faux(x, arbre->_izq, raiz_izq, raiz_der, ins_izq, ins_der);
+            }
+            arbre->N = 1;
+            if(arbre->_izq != NULL) arbre->N += arbre->_izq->N;
+            if(arbre->_der != NULL) arbre->N += arbre->_der->N;
+        }
     }
     
     
